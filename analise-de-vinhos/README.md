@@ -274,10 +274,13 @@ Com a base tratada e importada para o Power Bi diretamente do PostgreSQL, o dash
 
 O dashboard consolida os insights dos blocos anteriores em 4 perspectivas:
 
-** - Evolução Temporal:** Acompanhamento da receita MoM, permitindo monitorar o ritmo de vendas.
-** - Ranking de Performance:** Identificação direta das variedades de uvas por país que mais geram receita.
-** - Matriz de Eficiência (Qualidade  vs Valor): ** Cruzamento estratégico entre a nota técnica do produto e o score comercial. O objetivo aqui é identificar os produtos de alta performance daqueles que estão apenas caros, permitindo identificar oportunidades de portifólio premium.
-** - Detecção de Outliers:** Utilização de lógica estatística para isolar vinhos que operam acima das faixas de preços convencionais (o desvio padrão). Permite identificar onde se concentram os produtos premium.
+**- Evolução Temporal:** Acompanhamento da receita MoM, permitindo monitorar o ritmo de vendas.
+
+**- Ranking de Performance:** Identificação direta das variedades de uvas por país que mais geram receita.
+
+**- Matriz de Eficiência (Qualidade  vs Valor):** Cruzamento estratégico entre a nota técnica do produto e o score comercial. O objetivo aqui é identificar os produtos de alta performance daqueles que estão apenas caros, permitindo identificar oportunidades de portifólio premium.
+
+**- Detecção de Outliers:** Utilização de lógica estatística para isolar vinhos que operam acima das faixas de preços convencionais (o desvio padrão). Permite identificar onde se concentram os produtos premium.
 
 
 
