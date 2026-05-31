@@ -128,3 +128,27 @@ order by total_vinho_pais desc
 
 ------------------------------------------------------------------------------------------------------------------------------------------------
 
+--Bloco 4: Query para Criação de Dashboard no PBI:
+
+CREATE VIEW dw_vendas_bi
+as
+with tabela_tratada as (
+select v.id_venda, v.data_venda, 
+v.quantidade::NUMERIC as volume_vendas,
+coalesce (w.price,0) as preco_unitario, 
+(v.quantidade * coalesce (w.price,0))::NUMERIC as faturamento_total, 
+1::NUMERIC as frequencia_compra, 
+coalesce(w.points::INTEGER, 0) as nota_tecnica,
+w.country as pais, w.province as estado, 
+w.winery as vinicola, w.variety as variedade_uva
+from vendas3 v join winetable w
+on v.id_vinho = w.id_table
+)
+select id_venda, data_venda, pais, estado, 
+vinicola, variedade_uva,
+volume_vendas, preco_unitario, faturamento_total, 
+frequencia_compra, nota_tecnica, 
+round(((volume_vendas/max(volume_vendas) over())*0.4 + 
+(faturamento_total/max(faturamento_total)over()) * 0.4
++ (frequencia_compra/max(frequencia_compra) over()) * 0.2), 4) as score_performance
+from tabela_tratada
