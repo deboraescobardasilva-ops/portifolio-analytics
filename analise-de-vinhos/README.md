@@ -269,7 +269,8 @@ from tabela_tratada
 
 Com a base tratada e importada para o Power Bi diretamente do PostgreSQL, o dashboard consolida os insights dos blocos anteriores em uma visão única, onde os gráficos interagem entre si  e permitem filtrar a performance.
 
-<img width="1165" height="662" alt="image" src="https://github.com/user-attachments/assets/fa20f725-7569-429c-9d92-b6fdbf4e610a" />
+<img width="1164" height="658" alt="image" src="https://github.com/user-attachments/assets/ef939166-fd4e-4697-a7be-d20c01db92e3" />
+
 
 O dashboard consolida os insights dos blocos anteriores em 4 perspectivas:
 
