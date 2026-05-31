@@ -192,7 +192,7 @@ order by score_performance desc
 
 **- Eficiência e Volume:** A vinícola Chateau Ste.Michelle consegue se posicionar no Top 5 mesmo com um preço médio baixo ($23.12), o que comprova que o score é sustentado por um alto volume de vendas e frequência no mercado.
 
-## 📊Bloco 3: Governança de Pricing & Eficiência Operacional::
+## 📊Bloco 3: Governança de Pricing & Eficiência Operacional:
 
 ## Análise 3.1: Detecção de Outliers de Preço por País (Volumetria de Dispersão):
 
@@ -223,7 +223,7 @@ order by total_vinho_pais desc
 
 <img width="804" height="219" alt="image" src="https://github.com/user-attachments/assets/5f4b38fa-99c3-4671-ac18-11c90bf6af2f" />
 
-(Output resumido com os 6 países com maior volume de dados para demonstrar a eficiência do modelo estatístico de dispersão. O resultado total engloba 40 países auditados.
+(Output resumido com os 6 países com maior volume de dados para demonstrar a eficiência do modelo estatístico de dispersão. O resultado total engloba 40 países auditados.)
 
 **💡Insight:** 
 
@@ -232,6 +232,60 @@ order by total_vinho_pais desc
 **- Comportamento de Mercado (EUA vs Europa):** Embora a França e Itália tenham volumes similares de vinhos no padrão (casa de 20 mil), o mercado americano (US) se destaca com 1.825 vinhos considerados como outliers caros. Isso indica que os EUA operam em uma dinâmica de mercado com dispersão muito mais agressiva para o segmento super premium.
 
 **- Direcionamento de Auditoria Detalhada:** Essa visão macro funciona como um dashboard de controle. Ao perceber que uma região apresenta quantidade anormal de outliers, o analista ganha direcionamento estratégico de qual país precisa sofrer um drill-down em uma análise subsequente.
+
+## 📊Bloco 4: Visão geral do Negócio - Dashboard de Performance e Resultados:
+
+## 🛠️4.1: Preparação da Base:
+
+**Objetivo:** O primeiro passo foi criar uma estrutura de dados enxuta. Em vez de carregar várias tabelas, criei uma VIEW no PostgreSQL que já entrega os dados essenciais para a análise, garantindo que o Power Bi fique leve e  modelagem seja eficiente. Essa view traz todas as colunas necessárias para criação de medidas e análises, eliminando ruídos e gerando um modelo de dados enxuto:
+```sql
+CREATE VIEW
+with tabela_tratada as (
+select v.id_venda, v.data_venda, 
+v.quantidade::NUMERIC as volume_vendas,
+coalesce (w.price,0) as preco_unitario, 
+(v.quantidade * coalesce (w.price,0))::NUMERIC as faturamento_total, 
+1::NUMERIC as frequencia_compra,
+coalesce(w.points::INTEGER, 0) as nota_tecnica,
+w.country as pais, w.province as estado, w.winery as vinicola, w.variety as variedade_uva
+from vendas3 v join winetable w
+on v.id_vinho = w.id_table
+)
+select id_venda, data_venda, pais, estado, vinicola, variedade_uva,
+volume_vendas, preco_unitario, faturamento_total, frequencia_compra, nota_tecnica, 
+round(((volume_vendas/max(volume_vendas) over())*0.4 + 
+(faturamento_total/max(faturamento_total)over()) * 0.4
++ (frequencia_compra/max(frequencia_compra) over()) * 0.2), 4) as score_performance
+from tabela_tratada
+```
+
+**💻4.2. Resultado esperado do Output (Recorte):**
+
+<img width="1460" height="530" alt="image" src="https://github.com/user-attachments/assets/90d2d24b-244e-4d74-a1ab-f621f323c953" />
+
+(Output resumido com as primeiras linhas da tabela para mostrar algumas das métricas que serão importadas para o Power Bi).
+
+**💡4.3. O Painel de Controle:**
+
+Com a base tratada e importada para o Power Bi diretamente do PostgreSQL, o dashboard consolida os insights dos blocos anteriores em uma visão única, onde os gráficos interagem entre si  e permitem filtrar a performance.
+
+<img width="1165" height="662" alt="image" src="https://github.com/user-attachments/assets/fa20f725-7569-429c-9d92-b6fdbf4e610a" />
+
+O dashboard consolida os insights dos blocos anteriores em 4 perspectivas:
+
+** - Evolução Temporal:** Acompanhamento da receita MoM, permitindo monitorar o ritmo de vendas.
+** - Ranking de Performance:** Identificação direta das variedades de uvas por país que mais geram receita.
+** - Matriz de Eficiência (Qualidade  vs Valor): ** Cruzamento estratégico entre a nota técnica do produto e o score comercial. O objetivo aqui é identificar os produtos de alta performance daqueles que estão apenas caros, permitindo identificar oportunidades de portifólio premium.
+** - Detecção de Outliers:** Utilização de lógica estatística para isolar vinhos que operam acima das faixas de preços convencionais (o desvio padrão). Permite identificar onde se concentram os produtos premium.
+
+
+
+
+
+
+
+
+
 
 
 
